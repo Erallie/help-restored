@@ -101,14 +101,14 @@ public class HelpRestored extends JavaPlugin {
                 HelpTopicData topic = helpTopics.get(query.toLowerCase());
                 if (topic != null && topic.canSee(sender)) {
                     List<String> content = topic.getContent();
-                    int totalPages = (int) Math.ceil((double) content.size() / 10);
+                    int totalPages = (int) Math.ceil((double) content.size() / 9);
                     if (page > totalPages || page < 1) {
                         sender.sendMessage("§cPage not found. There are only " + totalPages + " pages.");
                         return true;
                     }
                     sender.sendMessage("§6--- Help: " + topic.getName() + " (Page " + page + " of " + totalPages + ") ---");
-                    int start = (page - 1) * 10;
-                    int end = Math.min(start + 10, content.size());
+                    int start = (page - 1) * 9;
+                    int end = Math.min(start + 9, content.size());
                     for (int i = start; i < end; i++) {
                         sender.sendMessage(content.get(i));
                     }
