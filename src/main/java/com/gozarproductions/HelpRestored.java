@@ -111,7 +111,11 @@ public class HelpRestored extends JavaPlugin {
                     int start = (page - 1) * 9;
                     int end = Math.min(start + 9, content.size());
                     for (int i = start; i < end; i++) {
-                        sender.sendMessage(content.get(i));
+                        String line = content.get(i);
+                        String lineKey = line.replace("§e", "").trim().toLowerCase();
+                        HelpTopicData referencedTopic = helpTopics.get(lineKey);
+                        String shortText = (referencedTopic != null) ? referencedTopic.getPreview(HelpRestored.this, helpConfig) : "";
+                        sender.sendMessage(line + " §7- " + shortText);
                     }
                 } else {
                     sender.sendMessage("§cNo help topic found for: " + query);
@@ -130,7 +134,11 @@ public class HelpRestored extends JavaPlugin {
                     int start = (page - 1) * 9;
                     int end = Math.min(start + 9, content.size());
                     for (int i = start; i < end; i++) {
-                        sender.sendMessage(content.get(i));
+                        String line = content.get(i);
+                        String lineKey = line.replace("§e", "").trim().toLowerCase();
+                        HelpTopicData referencedTopic = helpTopics.get(lineKey);
+                        String shortText = (referencedTopic != null) ? referencedTopic.getPreview(HelpRestored.this, helpConfig) : "";
+                        sender.sendMessage(line + " §7- " + shortText);
                     }
                     return true;
                 }
