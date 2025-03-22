@@ -64,10 +64,10 @@ public class HelpRestored extends JavaPlugin {
                 try {
                     page = Integer.parseInt(args[0]);
                 } catch (NumberFormatException e) {
-                    query = args[0].startsWith("/") ? args[0] : "/" + args[0];
+                    query = args[0];
                 }
             } else if (args.length >= 2) {
-                query = args[0].startsWith("/") ? args[0] : "/" + args[0];
+                query = args[0];
                 try {
                     page = Integer.parseInt(args[1]);
                 } catch (NumberFormatException e) {
@@ -79,7 +79,7 @@ public class HelpRestored extends JavaPlugin {
             if (query != null) {
                 HelpTopic topic = helpMap.getHelpTopic(query);
                 if (topic != null && topic.canSee(sender)) {
-                    String name = topic.getName().startsWith("/") ? topic.getName().substring(1) : topic.getName();
+                    String name = topic.getName();
                     List<String> lines;
                     if (helpConfig.contains("general-topics." + name + ".fullText")) {
                         lines = Arrays.asList(helpConfig.getString("general-topics." + name + ".fullText").split("\n"));
