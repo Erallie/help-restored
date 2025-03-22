@@ -185,18 +185,27 @@ public class HelpRestored extends JavaPlugin {
         }
 
         public String getPreview(JavaPlugin plugin, FileConfiguration config) {
+            plugin.getLogger().info("Fetching preview for topic: " + name);
             if (config != null && config.contains("general-topics." + name + ".shortText")) {
-                return config.getString("general-topics." + name + ".shortText", "");
+                String text = config.getString("general-topics." + name + ".shortText", "");
+                plugin.getLogger().info("Found in general-topics: " + text);
+                return text;
             }
             if (config != null && config.contains("amended-topics." + name + ".shortText")) {
-                return config.getString("amended-topics." + name + ".shortText", "");
+                String text = config.getString("amended-topics." + name + ".shortText", "");
+                plugin.getLogger().info("Found in amended-topics: " + text);
+                return text;
             }
             if (config != null && config.contains("index-topics." + name + ".shortText")) {
-                return config.getString("index-topics." + name + ".shortText", "");
+                String text = config.getString("index-topics." + name + ".shortText", "");
+                plugin.getLogger().info("Found in index-topics: " + text);
+                return text;
             }
             PluginCommand pluginCommand = plugin.getCommand(name);
             if (pluginCommand != null && pluginCommand.getDescription() != null) {
-                return pluginCommand.getDescription();
+                String desc = pluginCommand.getDescription();
+                plugin.getLogger().info("Using plugin.yml description fallback: " + desc);
+                return desc;
             }
             return "";
         }
