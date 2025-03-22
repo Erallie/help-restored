@@ -86,7 +86,7 @@ public class HelpRestored extends JavaPlugin {
                 try {
                     page = Integer.parseInt(args[0]);
                 } catch (NumberFormatException e) {
-                    query = args[0];
+                    query = args[0].startsWith("/") ? args[0] : "/" + args[0];
                 }
             } else if (args.length >= 2) {
                 query = args[0];
