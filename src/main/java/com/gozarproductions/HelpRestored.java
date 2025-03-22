@@ -98,7 +98,7 @@ public class HelpRestored extends JavaPlugin {
             }
 
             if (query != null) {
-                HelpTopicData topic = helpTopics.get(query.toLowerCase());
+                HelpTopicData topic = helpTopics.get(query.replace("/", "").toLowerCase());
                 if (topic != null && topic.canSee(sender)) {
                     List<String> content = topic.getContent();
                     int totalPages = (int) Math.ceil((double) content.size() / 9);
