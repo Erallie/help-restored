@@ -1,0 +1,8 @@
+name: Help Restored
+version: 1.0
+main: com.gozarproductions.HelpRestored
+api-version: 1.21
+commands:
+  help:
+    description: Dummy command to initialize HelpMap
+    usage: /help
