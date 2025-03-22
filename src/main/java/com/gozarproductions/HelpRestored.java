@@ -152,7 +152,8 @@ public class HelpRestored extends JavaPlugin {
             int end = Math.min(start + ENTRIES_PER_PAGE, visibleTopics.size());
             for (int i = start; i < end; i++) {
                 HelpTopicData topic = visibleTopics.get(i);
-                sender.sendMessage("§e/help " + topic.getName() + "§7 - " + topic.getPreview());
+                String shortText = topic.getPreview();
+                sender.sendMessage("§e/help " + topic.getName() + " §7- " + shortText);
             }
 
             return true;
