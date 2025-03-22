@@ -7,5 +7,10 @@ author: Erika Gozar
 website: https://gozarproductions.com
 commands:
   help:
-    description: Dummy command to initialize HelpMap
+    description: Shows the help menu.
     usage: /help
+    permission: helprestored.use
+permissions:
+  helprestored.use:
+    description: Allows use of /help
+    default: true
