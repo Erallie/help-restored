@@ -11,6 +11,7 @@ import java.util.*;
 public class HelpRestored extends JavaPlugin {
 
     private final Map<String, HelpTopicData> helpTopics = new HashMap<>();
+    private FileConfiguration helpConfig;
 
     @Override
     public void onEnable() {
@@ -28,43 +29,43 @@ public class HelpRestored extends JavaPlugin {
             return;
         }
 
-        FileConfiguration config = YamlConfiguration.loadConfiguration(helpFile);
+        helpConfig = YamlConfiguration.loadConfiguration(helpFile);
         getLogger().info("Loading help topics from help.yml...");
 
-        if (config.isConfigurationSection("general-topics")) {
-            for (String key : config.getConfigurationSection("general-topics").getKeys(false)) {
+        if (helpConfig.isConfigurationSection("general-topics")) {
+            for (String key : helpConfig.getConfigurationSection("general-topics").getKeys(false)) {
                 String path = "general-topics." + key;
-                String fullText = config.getString(path + ".fullText", "");
+                String fullText = helpConfig.getString(path + ".fullText", "");
                 List<String> content = Arrays.asList(fullText.split("\n"));
-                String permission = config.getString(path + ".permission", "");
+                String permission = helpConfig.getString(path + ".permission", "");
                 helpTopics.put(key.toLowerCase(), new HelpTopicData(key, content, permission));
                 getLogger().info("Loaded general topic: " + key);
             }
         }
 
-        if (config.isConfigurationSection("index-topics")) {
-            for (String key : config.getConfigurationSection("index-topics").getKeys(false)) {
+        if (helpConfig.isConfigurationSection("index-topics")) {
+            for (String key : helpConfig.getConfigurationSection("index-topics").getKeys(false)) {
                 String path = "index-topics." + key;
-                List<String> commands = config.getStringList(path + ".commands");
+                List<String> commands = helpConfig.getStringList(path + ".commands");
                 List<String> content = new ArrayList<>();
-                String preamble = config.getString(path + ".preamble", "");
+                String preamble = helpConfig.getString(path + ".preamble", "");
                 content.addAll(Arrays.asList(preamble.split("\n")));
                 content.add(" ");
                 for (String cmd : commands) {
                     content.add("§e" + cmd);
                 }
-                String permission = config.getString(path + ".permission", "");
+                String permission = helpConfig.getString(path + ".permission", "");
                 helpTopics.put(key.toLowerCase(), new HelpTopicData(key, content, permission));
                 getLogger().info("Loaded index topic: " + key);
             }
         }
 
-        if (config.isConfigurationSection("amended-topics")) {
-            for (String key : config.getConfigurationSection("amended-topics").getKeys(false)) {
+        if (helpConfig.isConfigurationSection("amended-topics")) {
+            for (String key : helpConfig.getConfigurationSection("amended-topics").getKeys(false)) {
                 String path = "amended-topics." + key;
-                String fullText = config.getString(path + ".fullText", "<text>");
+                String fullText = helpConfig.getString(path + ".fullText", "<text>");
                 List<String> content = Arrays.asList(fullText.split("\n"));
-                String permission = config.getString(path + ".permission", "");
+                String permission = helpConfig.getString(path + ".permission", "");
                 helpTopics.put(key.toLowerCase(), new HelpTopicData(key, content, permission));
                 getLogger().info("Loaded amended topic: " + key);
             }
@@ -120,14 +121,14 @@ public class HelpRestored extends JavaPlugin {
                 HelpTopicData defaultTopic = helpTopics.get("default");
                 if (defaultTopic.canSee(sender)) {
                     List<String> content = defaultTopic.getContent();
-                    int totalPages = (int) Math.ceil((double) content.size() / 10);
+                    int totalPages = (int) Math.ceil((double) content.size() / 9);
                     if (page > totalPages || page < 1) {
                         sender.sendMessage("§cPage not found. There are only " + totalPages + " pages.");
                         return true;
                     }
                     sender.sendMessage("§6--- Help: Default (Page " + page + " of " + totalPages + ") ---");
-                    int start = (page - 1) * 10;
-                    int end = Math.min(start + 10, content.size());
+                    int start = (page - 1) * 9;
+                    int end = Math.min(start + 9, content.size());
                     for (int i = start; i < end; i++) {
                         sender.sendMessage(content.get(i));
                     }
@@ -152,7 +153,7 @@ public class HelpRestored extends JavaPlugin {
             int end = Math.min(start + ENTRIES_PER_PAGE, visibleTopics.size());
             for (int i = start; i < end; i++) {
                 HelpTopicData topic = visibleTopics.get(i);
-                String shortText = topic.getPreview();
+                String shortText = topic.getPreview(HelpRestored.this, helpConfig);
                 sender.sendMessage("§e/help " + topic.getName() + " §7- " + shortText);
             }
 
@@ -183,8 +184,21 @@ public class HelpRestored extends JavaPlugin {
             return content;
         }
 
-        public String getPreview() {
-            return content.isEmpty() ? "" : content.get(0);
+        public String getPreview(JavaPlugin plugin, FileConfiguration config) {
+            if (config != null && config.contains("general-topics." + name + ".shortText")) {
+                return config.getString("general-topics." + name + ".shortText", "");
+            }
+            if (config != null && config.contains("amended-topics." + name + ".shortText")) {
+                return config.getString("amended-topics." + name + ".shortText", "");
+            }
+            if (config != null && config.contains("index-topics." + name + ".shortText")) {
+                return config.getString("index-topics." + name + ".shortText", "");
+            }
+            PluginCommand pluginCommand = plugin.getCommand(name);
+            if (pluginCommand != null && pluginCommand.getDescription() != null) {
+                return pluginCommand.getDescription();
+            }
+            return "";
         }
     }
 }
