@@ -98,31 +98,49 @@ public class HelpRestored extends JavaPlugin {
             }
 
             if (query != null) {
-                HelpRestored.HelpTopicData topic = helpTopics.get(query.toLowerCase());
+                HelpTopicData topic = helpTopics.get(query.toLowerCase());
                 if (topic != null && topic.canSee(sender)) {
-                    for (String line : topic.getContent()) {
-                        sender.sendMessage(line);
+                    List<String> content = topic.getContent();
+                    int totalPages = (int) Math.ceil((double) content.size() / 10);
+                    if (page > totalPages || page < 1) {
+                        sender.sendMessage("§cPage not found. There are only " + totalPages + " pages.");
+                        return true;
+                    }
+                    sender.sendMessage("§6--- Help: " + topic.getName() + " (Page " + page + " of " + totalPages + ") ---");
+                    int start = (page - 1) * 10;
+                    int end = Math.min(start + 10, content.size());
+                    for (int i = start; i < end; i++) {
+                        sender.sendMessage(content.get(i));
                     }
                 } else {
                     sender.sendMessage("§cNo help topic found for: " + query);
                 }
                 return true;
             } else if (helpTopics.containsKey("default")) {
-                HelpRestored.HelpTopicData defaultTopic = helpTopics.get("default");
+                HelpTopicData defaultTopic = helpTopics.get("default");
                 if (defaultTopic.canSee(sender)) {
-                    for (String line : defaultTopic.getContent()) {
-                        sender.sendMessage(line);
+                    List<String> content = defaultTopic.getContent();
+                    int totalPages = (int) Math.ceil((double) content.size() / 10);
+                    if (page > totalPages || page < 1) {
+                        sender.sendMessage("§cPage not found. There are only " + totalPages + " pages.");
+                        return true;
+                    }
+                    sender.sendMessage("§6--- Help: Default (Page " + page + " of " + totalPages + ") ---");
+                    int start = (page - 1) * 10;
+                    int end = Math.min(start + 10, content.size());
+                    for (int i = start; i < end; i++) {
+                        sender.sendMessage(content.get(i));
                     }
                     return true;
                 }
             }
 
-            List<HelpRestored.HelpTopicData> visibleTopics = new ArrayList<>();
-            for (HelpRestored.HelpTopicData topic : helpTopics.values()) {
+            List<HelpTopicData> visibleTopics = new ArrayList<>();
+            for (HelpTopicData topic : helpTopics.values()) {
                 if (topic.canSee(sender)) visibleTopics.add(topic);
             }
 
-            visibleTopics.sort(Comparator.comparing(HelpRestored.HelpTopicData::getName));
+            visibleTopics.sort(Comparator.comparing(HelpTopicData::getName));
             int totalPages = (int) Math.ceil((double) visibleTopics.size() / ENTRIES_PER_PAGE);
             if (page > totalPages || page < 1) {
                 sender.sendMessage("§cPage not found. There are only " + totalPages + " pages.");
@@ -133,7 +151,7 @@ public class HelpRestored extends JavaPlugin {
             int start = (page - 1) * ENTRIES_PER_PAGE;
             int end = Math.min(start + ENTRIES_PER_PAGE, visibleTopics.size());
             for (int i = start; i < end; i++) {
-                HelpRestored.HelpTopicData topic = visibleTopics.get(i);
+                HelpTopicData topic = visibleTopics.get(i);
                 sender.sendMessage("§e/help " + topic.getName() + "§7 - " + topic.getPreview());
             }
 
