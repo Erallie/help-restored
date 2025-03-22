@@ -119,26 +119,33 @@ public class HelpRestored extends JavaPlugin {
                 return true;
             }
 
-            List<HelpTopic> visibleTopics = new ArrayList<>(helpMap.getHelpTopics());
-            visibleTopics.removeIf(t -> !t.canSee(sender));
-            visibleTopics.sort(Comparator.comparing(HelpTopic::getName));
-
-            int totalPages = (int) Math.ceil((double) visibleTopics.size() / ENTRIES_PER_PAGE);
-            if (page > totalPages || page < 1) {
-                sender.sendMessage("§cPage not found. There are only " + totalPages + " pages.");
-                return true;
-            }
-
-            sender.sendMessage("§6--- Help: Page " + page + " of " + totalPages + " ---");
-            int start = (page - 1) * ENTRIES_PER_PAGE;
-            int end = Math.min(start + ENTRIES_PER_PAGE, visibleTopics.size());
-            for (int i = start; i < end; i++) {
-                HelpTopic topic = visibleTopics.get(i);
-                String shortText = getCustomShortText(topic.getName());
-                if (shortText == null || shortText.isEmpty()) {
-                    shortText = topic.getShortText();
+            if (helpConfig.contains("index-topics.Default")) {
+                List<String> lines = new ArrayList<>();
+                lines.addAll(Arrays.asList(helpConfig.getString("index-topics.Default.preamble", "").split("\n")));
+                lines.add(" ");
+                for (String cmd : helpConfig.getStringList("index-topics.Default.commands")) {
+                    HelpTopic sub = helpMap.getHelpTopic(cmd);
+                    String desc = getCustomShortText(cmd);
+                    if ((desc == null || desc.isEmpty()) && sub != null) {
+                        desc = sub.getShortText();
+                    }
+                    lines.add("§e" + cmd + " §7- " + (desc != null ? desc : ""));
                 }
-                sender.sendMessage("§e" + topic.getName() + " §7- " + shortText);
+
+                int totalPages = (int) Math.ceil((double) lines.size() / ENTRIES_PER_PAGE);
+                if (page > totalPages || page < 1) {
+                    sender.sendMessage("§cPage not found. There are only " + totalPages + " pages.");
+                    return true;
+                }
+
+                sender.sendMessage("§6--- Help: Page " + page + " of " + totalPages + " ---");
+                int start = (page - 1) * ENTRIES_PER_PAGE;
+                int end = Math.min(start + ENTRIES_PER_PAGE, lines.size());
+                for (int i = start; i < end; i++) {
+                    sender.sendMessage(lines.get(i));
+                }
+
+                return true;
             }
 
             return true;
