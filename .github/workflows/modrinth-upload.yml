@@ -38,33 +38,32 @@ jobs:
 
       - name: Prepare Modrinth metadata
         run: |
+          echo "Checking if version is a snapshot..."
+          VERSION="${{ github.ref_name }}"
+          IS_SNAPSHOT=$(echo "$VERSION" | grep -i snapshot || true)
+
+          if [ -n "$IS_SNAPSHOT" ]; then
+            FEATURED=false
+            CHANNEL="beta"
+          else
+            FEATURED=true
+            CHANNEL="release"
+          fi
+
           cat <<EOF > version.json
           {
             "name": "${{ github.event.release.name }}",
-            "version_number": "${{ github.ref_name }}",
+            "version_number": "$VERSION",
             "project_id": "zE5EbgF4",
             "game_versions": ["1.21", "1.21.1", "1.21.2", "1.21.3", "1.21.4"],
-            "loaders": ["spigot", "paper", "purpur"],
-            "featured": true,
-            "release_channel": "release",
+            "loaders": ["purpur"],
+            "featured": $FEATURED,
+            "release_channel": "$CHANNEL",
             "changelog": "${{ github.event.release.body }}",
-            "dependencies": [
-                {
-                "version": "*",
-                "project_id": "UmLGoGij",
-                "dependency_type": "required"
-                },
-                {
-                "version": "*",
-                "project_id": "hXiIvTyT",
-                "dependency_type": "required"
-                }
-            ],
+            "dependencies": [],
             "file_parts": ["$ASSET_NAME"]
           }
           EOF
-
-
 
       - name: Upload to Modrinth via API
         env:
