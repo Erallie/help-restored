@@ -63,12 +63,12 @@ public class HelpCommand implements CommandExecutor {
     }
 
     private HelpTopic getTopic(String rawName) {
-        String name = rawName.startsWith("/") ? rawName.substring(1) : rawName;
+        String commandName = "/" + rawName;
 
-        HelpTopic topic = topics.getOrDefault(rawName, topics.get(name));
+        HelpTopic topic = topics.getOrDefault(rawName, topics.get(commandName));
         if (topic == null) {
             topic = plugin.getHelpMap().getHelpTopic(rawName);
-            if (topic == null) topic = plugin.getHelpMap().getHelpTopic(name);
+            if (topic == null) topic = plugin.getHelpMap().getHelpTopic(commandName);
         }
 
         return topic;
