@@ -1,6 +1,7 @@
 package com.gozarproductions;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -111,7 +112,7 @@ public class HelpRestored extends JavaPlugin {
                     int start = (page - 1) * ENTRIES_PER_PAGE;
                     int end = Math.min(start + ENTRIES_PER_PAGE, lines.size());
                     for (int i = start; i < end; i++) {
-                        sender.sendMessage(lines.get(i));
+                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', lines.get(i)));
                     }
                 } else {
                     sender.sendMessage("§cNo help topic found for: " + query);
@@ -142,7 +143,7 @@ public class HelpRestored extends JavaPlugin {
                 int start = (page - 1) * ENTRIES_PER_PAGE;
                 int end = Math.min(start + ENTRIES_PER_PAGE, lines.size());
                 for (int i = start; i < end; i++) {
-                    sender.sendMessage(lines.get(i));
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', lines.get(i)));
                 }
 
                 return true;
