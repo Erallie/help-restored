@@ -70,13 +70,23 @@ public class HelpCommand implements CommandExecutor {
     private HelpTopic getTopic(String rawName) {
         String commandName = "/" + rawName;
 
-        HelpTopic topic = topics.getOrDefault(rawName, topics.get(commandName));
-        if (topic == null) {
-            topic = plugin.getHelpMap().getHelpTopic(rawName);
-            if (topic == null) topic = plugin.getHelpMap().getHelpTopic(commandName);
+        // Try case-insensitive match in custom topics
+        for (Map.Entry<String, HelpTopic> entry : topics.entrySet()) {
+            String key = entry.getKey();
+            if (key.equalsIgnoreCase(rawName) || key.equalsIgnoreCase(commandName)) {
+                return entry.getValue();
+            }
         }
 
-        return topic;
+        // Try case-insensitive match in Bukkit's help map
+        for (HelpTopic topic : plugin.getHelpMap().getHelpTopics()) {
+            String topicName = topic.getName();
+            if (topicName.equalsIgnoreCase(rawName) || topicName.equalsIgnoreCase(commandName)) {
+                return topic;
+            }
+        }
+
+        return null;
     }
 
     @Override
