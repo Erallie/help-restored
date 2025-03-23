@@ -1,12 +1,17 @@
 package com.gozarproductions;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.help.HelpMap;
 import org.bukkit.help.HelpTopic;
 
-import java.util.*;
 
 public class HelpCommand implements CommandExecutor {
     private final HelpRestored plugin;
