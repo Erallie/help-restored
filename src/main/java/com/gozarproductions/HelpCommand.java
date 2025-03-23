@@ -62,6 +62,11 @@ public class HelpCommand implements CommandExecutor {
         }
     }
 
+    public void reload() {
+        loadCustomTopics(); // or whatever your loader is called
+    }
+
+
     private HelpTopic getTopic(String rawName) {
         String commandName = "/" + rawName;
 

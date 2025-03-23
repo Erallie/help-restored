@@ -1,7 +1,9 @@
 package com.gozarproductions;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.PluginCommand;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.help.HelpMap;
@@ -12,6 +14,7 @@ import java.io.File;
 public class HelpRestored extends JavaPlugin {
     private FileConfiguration helpConfig;
     private HelpMap helpMap;
+    private HelpCommand helpCommand;
 
     public FileConfiguration getHelpConfig() {
         return helpConfig;
@@ -27,10 +30,9 @@ public class HelpRestored extends JavaPlugin {
         loadHelpConfig();
         this.helpMap = Bukkit.getHelpMap();
 
-        PluginCommand helpCommand = getCommand("help");
-        if (helpCommand != null) {
-            helpCommand.setExecutor(new HelpCommand(this));
-        }
+        helpCommand = new HelpCommand(this);
+        getCommand("help").setExecutor(helpCommand);
+        getCommand("helpreload").setExecutor(new HelpReload());
     }
 
     private void loadHelpConfig() {
@@ -42,5 +44,15 @@ public class HelpRestored extends JavaPlugin {
         }
 
         helpConfig = YamlConfiguration.loadConfiguration(helpFile);
+    }
+
+    public class HelpReload implements CommandExecutor {
+        @Override
+        public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+            loadHelpConfig();
+            helpCommand.reload();
+            return true;
+        }
+        
     }
 }

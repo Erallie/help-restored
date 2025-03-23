@@ -8,18 +8,18 @@ website: https://gozarproductions.com
 commands:
   help:
     description: Shows the help menu.
-    usage: /help
+    usage: /help <topic> [page]
     permission: helprestored.use
-  # helpreload:
-  #   description: Reloads help.yml and all configs.
-  #   usage: /helpreload
-  #   permission: helprestored.admin
+  helpreload:
+    description: Reloads help.yml and all configs.
+    usage: /helpreload
+    permission: helprestored.admin
 permissions:
   helprestored.use:
     description: Allows use of /help
     default: true
-  # helprestored.admin:
-  #   description: Allows use of /helpreload
-  #   default: op
-  #   children:
-  #     helprestored.use: true
+  helprestored.admin:
+    description: Allows use of /helpreload
+    default: op
+    children:
+      helprestored.use: true
