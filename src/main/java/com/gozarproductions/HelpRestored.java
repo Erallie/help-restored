@@ -28,7 +28,7 @@ public class HelpRestored extends JavaPlugin {
     public void onEnable() {
         getLogger().info("HelpRestored enabled.");
         loadHelpConfig();
-        this.helpMap = Bukkit.getHelpMap();
+        helpMap = Bukkit.getHelpMap();
 
         helpCommand = new HelpCommand(this);
         getCommand("help").setExecutor(helpCommand);
