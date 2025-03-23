@@ -8,48 +8,72 @@ import org.bukkit.help.HelpTopic;
 
 import java.util.*;
 
-// CommandExecutor for the /help command
 public class HelpCommand implements CommandExecutor {
     private final HelpRestored plugin;
-    private static final int ENTRIES_PER_PAGE = 9; // How many lines of help to show per page
+    private final Map<String, HelpTopic> topics = new HashMap<>();
+    private static final int ENTRIES_PER_PAGE = 9;
 
     public HelpCommand(HelpRestored plugin) {
         this.plugin = plugin;
+        loadCustomTopics();
     }
 
-    // Attempts to find a custom shortText for a given help topic name from the helpConfig
-    private String getCustomShortText(String topicName) {
-        String cleanName = topicName.startsWith("/") ? topicName.substring(1) : topicName;
-        FileConfiguration helpConfig = plugin.getHelpConfig();
+    private void loadCustomTopics() {
+        FileConfiguration config = plugin.getHelpConfig();
+        HelpMap helpMap = plugin.getHelpMap();
 
-        if (helpConfig == null) return null;
+        if (config == null) return;
 
-        // Check multiple locations in the YAML structure for a matching shortText
-        if (helpConfig.contains("general-topics." + topicName + ".shortText"))
-            return helpConfig.getString("general-topics." + topicName + ".shortText");
-        if (helpConfig.contains("amended-topics." + topicName + ".shortText"))
-            return helpConfig.getString("amended-topics." + topicName + ".shortText");
-        if (helpConfig.contains("index-topics." + topicName + ".shortText"))
-            return helpConfig.getString("index-topics." + topicName + ".shortText");
-        if (helpConfig.contains("general-topics." + cleanName + ".shortText"))
-            return helpConfig.getString("general-topics." + cleanName + ".shortText");
-        if (helpConfig.contains("amended-topics." + cleanName + ".shortText"))
-            return helpConfig.getString("amended-topics." + cleanName + ".shortText");
-        if (helpConfig.contains("index-topics." + cleanName + ".shortText"))
-            return helpConfig.getString("index-topics." + cleanName + ".shortText");
+        for (String section : Arrays.asList("general-topics", "amended-topics", "index-topics")) {
+            if (!config.contains(section)) continue;
 
-        return null;
+            for (String key : config.getConfigurationSection(section).getKeys(false)) {
+                String path = section + "." + key;
+                String shortText = config.getString(path + ".shortText", null);
+                String permission = config.getString(path + ".permission", null);
+                List<String> fullTextLines = null;
+
+                if (config.contains(path + ".fullText")) {
+                    fullTextLines = Arrays.asList(config.getString(path + ".fullText", "").split("\n"));
+                } else if (config.contains(path + ".preamble")) {
+                    List<String> lines = new ArrayList<>(Arrays.asList(config.getString(path + ".preamble", "").split("\n")));
+                    lines.add(" ");
+
+                    for (String cmd : config.getStringList(path + ".commands")) {
+                        HelpTopic sub = helpMap.getHelpTopic(cmd);
+                        String desc = config.getString(section + "." + cmd + ".shortText");
+                        if ((desc == null || desc.isEmpty()) && sub != null) {
+                            desc = sub.getShortText();
+                        }
+                        lines.add("§e" + cmd + " §7- " + (desc != null ? desc : ""));
+                    }
+
+                    fullTextLines = lines;
+                }
+
+                HelpTopic fallback = helpMap.getHelpTopic(key);
+                topics.put(key, new CustomHelpTopic(key, shortText, fullTextLines, permission, fallback));
+            }
+        }
+    }
+
+    private HelpTopic getTopic(String rawName) {
+        String name = rawName.startsWith("/") ? rawName.substring(1) : rawName;
+
+        HelpTopic topic = topics.getOrDefault(rawName, topics.get(name));
+        if (topic == null) {
+            topic = plugin.getHelpMap().getHelpTopic(rawName);
+            if (topic == null) topic = plugin.getHelpMap().getHelpTopic(name);
+        }
+
+        return topic;
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        int page = 1;      // Default page
-        String query = null; // Default query (no topic)
+        int page = 1;
+        String query = null;
 
-        HelpMap helpMap = plugin.getHelpMap();
-        FileConfiguration helpConfig = plugin.getHelpConfig();
-
-        // Handle arguments to determine if user is specifying a topic or a page
         if (args.length == 1) {
             try {
                 page = Integer.parseInt(args[0]);
@@ -66,91 +90,42 @@ public class HelpCommand implements CommandExecutor {
             }
         }
 
-        // If a query (topic) is provided
         if (query != null) {
-            HelpTopic topic = helpMap.getHelpTopic(query);
-
+            HelpTopic topic = getTopic(query);
             if (topic != null && topic.canSee(sender)) {
-                String name = topic.getName();
-                List<String> lines;
-
-                // Check for custom fullText in various YAML sections
-                if (helpConfig.contains("general-topics." + name + ".fullText")) {
-                    lines = Arrays.asList(helpConfig.getString("general-topics." + name + ".fullText").split("\n"));
-                } else if (helpConfig.contains("amended-topics." + name + ".fullText")) {
-                    String full = helpConfig.getString("amended-topics." + name + ".fullText");
-                    lines = Arrays.asList(full.replace("<text>", topic.getFullText(sender)).split("\n"));
-                } else if (helpConfig.contains("index-topics." + name + ".preamble")) {
-                    lines = new ArrayList<>();
-                    lines.addAll(Arrays.asList(helpConfig.getString("index-topics." + name + ".preamble").split("\n")));
-                    lines.add(" ");
-
-                    // List all subcommands with descriptions
-                    for (String cmd : helpConfig.getStringList("index-topics." + name + ".commands")) {
-                        HelpTopic sub = helpMap.getHelpTopic(cmd);
-                        String desc = getCustomShortText(cmd);
-                        if ((desc == null || desc.isEmpty()) && sub != null) {
-                            desc = sub.getShortText();
-                        }
-                        lines.add("§e" + cmd + " §7- " + (desc != null ? desc : ""));
-                    }
-                } else {
-                    lines = Arrays.asList(topic.getFullText(sender).split("\n"));
-                }
-
-                sender.sendMessage("§6--- Help: " + topic.getName() + " ---");
-
-                // Pagination logic
-                int totalPages = (int) Math.ceil((double) lines.size() / ENTRIES_PER_PAGE);
-                if (page > totalPages || page < 1) {
-                    sender.sendMessage("§cPage not found. There are only " + totalPages + " pages.");
-                    return true;
-                }
-
-                int start = (page - 1) * ENTRIES_PER_PAGE;
-                int end = Math.min(start + ENTRIES_PER_PAGE, lines.size());
-                for (int i = start; i < end; i++) {
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', lines.get(i)));
-                }
+                List<String> lines = Arrays.asList(topic.getFullText(sender).split("\n"));
+                sendPaged(sender, "Help: " + topic.getName(), lines, page);
             } else {
                 sender.sendMessage("§cNo help topic found for: " + query);
             }
             return true;
         }
 
-        // Default help menu if no topic was specified
-        if (helpConfig.contains("index-topics.Default")) {
-            List<String> lines = new ArrayList<>();
-
-            lines.addAll(Arrays.asList(helpConfig.getString("index-topics.Default.preamble", "").split("\n")));
-            lines.add(" ");
-
-            // List default commands
-            for (String cmd : helpConfig.getStringList("index-topics.Default.commands")) {
-                HelpTopic sub = helpMap.getHelpTopic(cmd);
-                String desc = getCustomShortText(cmd);
-                if ((desc == null || desc.isEmpty()) && sub != null) {
-                    desc = sub.getShortText();
-                }
-                lines.add("§e" + cmd + " §7- " + (desc != null ? desc : ""));
-            }
-
-            int totalPages = (int) Math.ceil((double) lines.size() / ENTRIES_PER_PAGE);
-            if (page > totalPages || page < 1) {
-                sender.sendMessage("§cPage not found. There are only " + totalPages + " pages.");
-                return true;
-            }
-
-            sender.sendMessage("§6--- Help: Page " + page + " of " + totalPages + " ---");
-            int start = (page - 1) * ENTRIES_PER_PAGE;
-            int end = Math.min(start + ENTRIES_PER_PAGE, lines.size());
-            for (int i = start; i < end; i++) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', lines.get(i)));
-            }
-
+        // Show default index if defined
+        HelpTopic defaultTopic = getTopic("Default");
+        if (defaultTopic != null && defaultTopic.canSee(sender)) {
+            List<String> lines = Arrays.asList(defaultTopic.getFullText(sender).split("\n"));
+            sendPaged(sender, "Help: Page " + page, lines, page);
             return true;
         }
 
+        sender.sendMessage("§cNo help topics available.");
         return true;
+    }
+
+    private void sendPaged(CommandSender sender, String title, List<String> lines, int page) {
+        int totalPages = (int) Math.ceil((double) lines.size() / ENTRIES_PER_PAGE);
+        if (page < 1 || page > totalPages) {
+            sender.sendMessage("§cPage not found. There are only " + totalPages + " pages.");
+            return;
+        }
+
+        sender.sendMessage("§6--- " + title + " (" + page + "/" + totalPages + ") ---");
+        int start = (page - 1) * ENTRIES_PER_PAGE;
+        int end = Math.min(start + ENTRIES_PER_PAGE, lines.size());
+
+        for (int i = start; i < end; i++) {
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', lines.get(i)));
+        }
     }
 }
