@@ -33,6 +33,9 @@ public class HelpRestored extends JavaPlugin {
         helpCommand = new HelpCommand(this);
         getCommand("help").setExecutor(helpCommand);
         getCommand("helpreload").setExecutor(new HelpReload());
+        
+        // Delay topic loading to ensure help.yml is fully registered
+        Bukkit.getScheduler().runTask(this, () -> helpCommand.reload());
     }
 
     private void loadHelpConfig() {
