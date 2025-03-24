@@ -24,6 +24,7 @@ public class HelpRestored extends JavaPlugin {
     private FileConfiguration helpConfig;
     private HelpMap helpMap;
     private List<CustomIndexHelpTopic> indexTopics;
+    private UpdateChecker updateChecker;
     // private HelpCommand helpCommand;
 
     public FileConfiguration getHelpConfig() {
@@ -48,6 +49,11 @@ public class HelpRestored extends JavaPlugin {
         // helpCommand = new HelpCommand(this);
         getCommand("help").setExecutor(new HelpCommand(this));
         getCommand("helpreload").setExecutor(new HelpReload());
+
+        
+        // Run the Update Checker using GitHub API
+        updateChecker = new UpdateChecker(this, "Erallie", "help-restored");
+        updateChecker.checkForUpdates();
         
         // Delay topic loading to ensure help.yml is fully registered
         Bukkit.getScheduler().runTask(this, () -> loadCustomTopics());
@@ -147,6 +153,8 @@ public class HelpRestored extends JavaPlugin {
         public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
             loadHelpConfig();
             loadCustomTopics();
+            
+            updateChecker.checkForUpdates();
             sender.sendMessage("§6help.yml §esuccessfully reloaded!");
             return true;
         }
