@@ -3,6 +3,8 @@ package com.gozarproductions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -77,14 +79,51 @@ public class HelpCommand implements CommandExecutor {
 
         // Show default index if defined
         HelpTopic defaultTopic = getTopic("Default");
+
+        boolean includeCommands = true;
+        if (plugin.getHelpConfig() != null &&
+            plugin.getHelpConfig().contains("command-topics-in-master-index")) {
+            includeCommands = plugin.getHelpConfig().getBoolean("command-topics-in-master-index");
+        }
+
         if (defaultTopic != null && defaultTopic.canSee(sender)) {
             String preamble = null;
             if (defaultTopic instanceof CustomIndexHelpTopic) {
                 preamble = ((CustomIndexHelpTopic) defaultTopic).getPreamble();
             }
-            sendPaged(sender, "Help: Page " + page, defaultTopic.getFullText(sender), preamble, page);
+
+            String fullText = defaultTopic.getFullText(sender);
+
+            if (includeCommands) {
+                List<HelpTopic> allTopics = new ArrayList<>();
+
+                // Add visible Bukkit help map topics
+                for (HelpTopic topic : plugin.getHelpMap().getHelpTopics()) {
+                    if (topic.canSee(sender)) {
+                        allTopics.add(topic);
+                    }
+                }
+
+                // Add visible custom index topics (not already in helpMap)
+                for (CustomIndexHelpTopic customTopic : plugin.getIndexTopics()) {
+                    if (customTopic.canSee(sender)) {
+                        allTopics.add(customTopic);
+                    }
+                }
+
+                // Format and sort them
+                List<String> commandLines = allTopics.stream()
+                    .map(t -> "§e" + t.getName() + "§7: " + t.getShortText())
+                    .sorted(String.CASE_INSENSITIVE_ORDER)
+                    .collect(Collectors.toList());
+
+                fullText += "\n" + String.join("\n", commandLines);
+            }
+
+            sendPaged(sender, "Help: Page " + page, fullText, preamble, page);
             return true;
         }
+
 
         sender.sendMessage("§cNo help topics available.");
         return true;
