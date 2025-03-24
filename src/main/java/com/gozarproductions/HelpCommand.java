@@ -100,7 +100,13 @@ public class HelpCommand implements CommandExecutor {
         int numEntries = ENTRIES_PER_PAGE - (preambleLines.size() + 1);
         int totalPages = (int) Math.ceil((double) lines.size() / numEntries);
         if (page < 1 || page > totalPages) {
-            sender.sendMessage("§cPage not found. There are only " + totalPages + " pages.");
+            String verb = "are";
+            String noun = "pages";
+            if (totalPages == 1) {
+                verb = "is";
+                noun = "page";
+            }
+            sender.sendMessage("§cPage not found. There " + verb + " only " + totalPages + " " + noun + ".");
             return;
         }
 
