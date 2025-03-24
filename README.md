@@ -10,6 +10,7 @@ If you want to know how to set up your `help.yml`, see [this page](https://bukki
   - **Usage:** `/help <topic> [page]`
   - **Permission:** `helprestored.use`
 - `/helpreload` - Safely reloads `help.yml`
+  - **Usage:** `/helpreload`
   - **Permission:** `helprestored.admin`
 
 ## Permissions
