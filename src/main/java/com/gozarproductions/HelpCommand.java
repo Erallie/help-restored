@@ -1,89 +1,31 @@
-/* package com.gozarproductions;
+package com.gozarproductions;
 
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.*;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.help.GenericCommandHelpTopic;
-import org.bukkit.help.HelpMap;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.help.IndexHelpTopic;
 
 
 public class HelpCommand implements CommandExecutor {
     private final HelpRestored plugin;
-    private final Map<String, HelpTopic> topics = new HashMap<>();
     private static final int ENTRIES_PER_PAGE = 9;
 
     public HelpCommand(HelpRestored plugin) {
         this.plugin = plugin;
-        loadCustomTopics();
-    }
-
-    private void loadCustomTopics() {
-        FileConfiguration config = plugin.getHelpConfig();
-        HelpMap helpMap = plugin.getHelpMap();
-
-        if (config == null) return;
-
-        for (String section : Arrays.asList("general-topics", "amended-topics", "index-topics")) {
-            if (!config.contains(section)) continue;
-
-            ConfigurationSection configSection = config.getConfigurationSection(section);
-
-            for (String key : configSection.getKeys(false)) {
-                String path = section + "." + key;
-                String shortText = config.getString(path + ".shortText", null);
-                String permission = config.getString(path + ".permission", null);
-                String fullText = config.getString(path + ".fullText", null);
-                switch (configSection.getName()) {
-                    case "general-topics":
-                        GenericCommandHelpTopic generalTopic = new GenericCommandHelpTopic(Bukkit.getPluginCommand(key));
-                        generalTopic.amendTopic(shortText, fullText);
-                        generalTopic.amendCanSee(permission);
-                        helpMap.addTopic(generalTopic);
-                        break;
-                    case "amended-topics":
-                        HelpTopic ammendedTopic;
-                        ammendedTopic = helpMap.getHelpTopic(key);
-                        ammendedTopic.amendTopic(shortText, fullText);
-                        ammendedTopic.amendCanSee(permission);
-                        break;
-                    case "index-topics":
-                        Collection<HelpTopic> subtopics = config.getStringList(path + ".commands").stream()
-                            .map(helpMap::getHelpTopic)
-                            .filter(Objects::nonNull)
-                            .collect(Collectors.toList());
-                        IndexHelpTopic indexTopic = new IndexHelpTopic(key, shortText, permission, subtopics);
-                        helpMap.addTopic(indexTopic);
-                        break;
-                }
-            }
-        }
-    }
-
-    public void reload() {
-        loadCustomTopics(); // or whatever your loader is called
     }
 
 
     private HelpTopic getTopic(String rawName) {
         String commandName = "/" + rawName;
 
-        // Try case-insensitive match in custom topics
-        for (Map.Entry<String, HelpTopic> entry : topics.entrySet()) {
-            String key = entry.getKey();
-            if (key.equalsIgnoreCase(rawName) || key.equalsIgnoreCase(commandName)) {
-                return entry.getValue();
+        for (IndexHelpTopic topic : plugin.getIndexTopics()) {
+            String topicName = topic.getName();
+            if (topicName.equalsIgnoreCase(rawName) || topicName.equalsIgnoreCase(commandName)) {
+                return topic;
             }
         }
 
@@ -158,4 +100,3 @@ public class HelpCommand implements CommandExecutor {
         }
     }
 }
- */
