@@ -46,6 +46,7 @@ jobs:
                     channel="beta"
                     featured=false
                 else
+                    channel="release"
                     if [[ "$IS_LATEST" == "true" ]]; then
                         echo "🌟 Latest release — setting as featured"
                         featured=true
