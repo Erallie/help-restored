@@ -65,18 +65,7 @@ jobs:
                     featured: $featured,
                     release_channel: $channel,
                     changelog: $changelog,
-                    dependencies: [
-                    {
-                        version: "*",
-                        project_id: "UmLGoGij",
-                        dependency_type: "required"
-                    },
-                    {
-                        version: "*",
-                        project_id: "hXiIvTyT",
-                        dependency_type: "required"
-                    }
-                    ],
+                    dependencies: [],
                     file_parts: [$file]
                 }' > version.json
 
