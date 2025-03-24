@@ -54,6 +54,7 @@ public class HelpRestored extends JavaPlugin {
         public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
             loadHelpConfig();
             helpCommand.reload();
+            sender.sendMessage("§6help.yml §esuccessfully reloaded!");
             return true;
         }
         
