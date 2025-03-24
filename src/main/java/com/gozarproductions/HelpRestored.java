@@ -9,7 +9,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.help.HelpMap;
 import org.bukkit.help.HelpTopic;
-import org.bukkit.help.IndexHelpTopic;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -24,7 +23,7 @@ import java.util.stream.Collectors;
 public class HelpRestored extends JavaPlugin {
     private FileConfiguration helpConfig;
     private HelpMap helpMap;
-    private List<IndexHelpTopic> indexTopics;
+    private List<CustomIndexHelpTopic> indexTopics;
     // private HelpCommand helpCommand;
 
     public FileConfiguration getHelpConfig() {
@@ -35,7 +34,7 @@ public class HelpRestored extends JavaPlugin {
         return helpMap;
     }
 
-    public List<IndexHelpTopic> getIndexTopics() {
+    public List<CustomIndexHelpTopic> getIndexTopics() {
         return indexTopics;
     }
 
@@ -93,6 +92,7 @@ public class HelpRestored extends JavaPlugin {
                         getLogger().info("Ammended topic: " + key);
                         break;
                     case "index-topics":
+                        String preamble = helpConfig.getString(path + ".preamble", null);
                         Collection<HelpTopic> subtopics = helpConfig.getStringList(path + ".commands").stream()
                             .map(cmd -> {
                                 // First try your custom indexTopics
@@ -107,8 +107,8 @@ public class HelpRestored extends JavaPlugin {
                             .filter(Objects::nonNull)
                             .collect(Collectors.toList());
 
-                        IndexHelpTopic indexTopic = new IndexHelpTopic(key, shortText, permission, subtopics);
-                        Optional<IndexHelpTopic> existing = indexTopics.stream()
+                        CustomIndexHelpTopic indexTopic = new CustomIndexHelpTopic(key, shortText, permission, preamble, subtopics);
+                        Optional<CustomIndexHelpTopic> existing = indexTopics.stream()
                             .filter(t -> t.getName().equals(key))
                             .findFirst();
                         if (existing.isPresent()) {
