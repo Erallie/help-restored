@@ -14,10 +14,12 @@ If you want to know how to set up your `help.yml`, see [this page](https://bukki
   - **Permission:** `helprestored.admin`
 
 ## Permissions
-
 - `helprestored.use`
   - **Description:** Allows use of `/help`
   - **Default:** `true`
 - `helprestored.admin`
   - **Description:** Allows use of `/helpreload`
   - **Default:** `op`
+
+# Support
+If you have any issues, or want to request a feature, please [create an issue](https://github.com/Erallie/help-restored/issues), and I will try my best to help!
