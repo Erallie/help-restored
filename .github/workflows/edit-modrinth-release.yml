@@ -47,8 +47,8 @@ jobs:
 
                 if [[ "$IS_PRERELEASE" == "true" ]]; then
                     echo "🔶 Prerelease detected — setting to beta and not featured"
-                    channel = "beta"
-                    featured = false
+                    channel="beta"
+                    featured=false
                 else
                     channel="release"
                     if [[ "$IS_LATEST" == "true" ]]; then
@@ -70,7 +70,6 @@ jobs:
                         release_channel: $channel,
                         featured: $featured
                     }' > update.json
-                fi
 
           - name: Patch Modrinth version info
             env:
