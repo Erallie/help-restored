@@ -1,4 +1,4 @@
-package com.gozarproductions;
+/* package com.gozarproductions;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.help.HelpTopic;
@@ -60,3 +60,4 @@ public class CustomHelpTopic extends HelpTopic {
         return this.getName().compareToIgnoreCase(other.getName());
     }
 }
+ */

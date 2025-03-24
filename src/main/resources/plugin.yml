@@ -6,10 +6,10 @@ description: Restores Bukkit's help.yml to Purpur.
 author: Erika Gozar
 website: https://gozarproductions.com
 commands:
-  help:
-    description: Shows the help menu.
-    usage: /help <topic> [page]
-    permission: helprestored.use
+  # help:
+  #   description: Shows the help menu.
+  #   usage: /help <topic> [page]
+  #   permission: helprestored.use
   helpreload:
     description: Reloads help.yml and all configs.
     usage: /helpreload

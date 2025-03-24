@@ -1,16 +1,22 @@
-package com.gozarproductions;
+/* package com.gozarproductions;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.*;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.help.GenericCommandHelpTopic;
 import org.bukkit.help.HelpMap;
 import org.bukkit.help.HelpTopic;
+import org.bukkit.help.IndexHelpTopic;
 
 
 public class HelpCommand implements CommandExecutor {
@@ -32,32 +38,35 @@ public class HelpCommand implements CommandExecutor {
         for (String section : Arrays.asList("general-topics", "amended-topics", "index-topics")) {
             if (!config.contains(section)) continue;
 
-            for (String key : config.getConfigurationSection(section).getKeys(false)) {
+            ConfigurationSection configSection = config.getConfigurationSection(section);
+
+            for (String key : configSection.getKeys(false)) {
                 String path = section + "." + key;
                 String shortText = config.getString(path + ".shortText", null);
                 String permission = config.getString(path + ".permission", null);
-                List<String> fullTextLines = null;
-
-                if (config.contains(path + ".fullText")) {
-                    fullTextLines = Arrays.asList(config.getString(path + ".fullText", "").split("\n"));
-                } else if (config.contains(path + ".preamble")) {
-                    List<String> lines = new ArrayList<>(Arrays.asList(config.getString(path + ".preamble", "").split("\n")));
-                    lines.add(" ");
-
-                    for (String cmd : config.getStringList(path + ".commands")) {
-                        HelpTopic sub = helpMap.getHelpTopic(cmd);
-                        String desc = config.getString(section + "." + cmd + ".shortText");
-                        if ((desc == null || desc.isEmpty()) && sub != null) {
-                            desc = sub.getShortText();
-                        }
-                        lines.add("§e" + cmd + " §7- " + (desc != null ? desc : ""));
-                    }
-
-                    fullTextLines = lines;
+                String fullText = config.getString(path + ".fullText", null);
+                switch (configSection.getName()) {
+                    case "general-topics":
+                        GenericCommandHelpTopic generalTopic = new GenericCommandHelpTopic(Bukkit.getPluginCommand(key));
+                        generalTopic.amendTopic(shortText, fullText);
+                        generalTopic.amendCanSee(permission);
+                        helpMap.addTopic(generalTopic);
+                        break;
+                    case "amended-topics":
+                        HelpTopic ammendedTopic;
+                        ammendedTopic = helpMap.getHelpTopic(key);
+                        ammendedTopic.amendTopic(shortText, fullText);
+                        ammendedTopic.amendCanSee(permission);
+                        break;
+                    case "index-topics":
+                        Collection<HelpTopic> subtopics = config.getStringList(path + ".commands").stream()
+                            .map(helpMap::getHelpTopic)
+                            .filter(Objects::nonNull)
+                            .collect(Collectors.toList());
+                        IndexHelpTopic indexTopic = new IndexHelpTopic(key, shortText, permission, subtopics);
+                        helpMap.addTopic(indexTopic);
+                        break;
                 }
-
-                HelpTopic fallback = helpMap.getHelpTopic(key);
-                topics.put(key, new CustomHelpTopic(key, shortText, fullTextLines, permission, fallback));
             }
         }
     }
@@ -149,3 +158,4 @@ public class HelpCommand implements CommandExecutor {
         }
     }
 }
+ */
