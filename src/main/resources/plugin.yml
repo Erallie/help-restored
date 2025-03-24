@@ -7,11 +7,11 @@ author: Erika Gozar
 website: https://gozarproductions.com
 commands:
   help:
-    description: Shows the help menu.
+    description: Shows the help menu
     usage: /help <topic> [page]
     permission: helprestored.use
   helpreload:
-    description: Reloads help.yml and all configs.
+    description: Safely reloads help.yml
     usage: /helpreload
     permission: helprestored.admin
 permissions:
