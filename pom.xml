@@ -5,7 +5,7 @@
     <groupId>com.gozarproductions</groupId>
     <artifactId>helprestored</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>Help Restored</name>
     <description>Restores Bukkit's help.yml to Purpur.</description>
     <repositories>
