@@ -56,10 +56,9 @@ jobs:
                     fi
                 fi                
 
-                jq -n \
+                jq -Rs \
                 --arg name "${{ github.event.release.name }}" \
                 --arg version "${{ github.ref_name }}" \
-                --arg changelog "$(cat changelog.txt)" \
                 --arg file "$ASSET_NAME" \
                 --arg channel "$channel" \
                 --argjson featured "$featured" \
@@ -71,10 +70,21 @@ jobs:
                     loaders: ["spigot", "paper", "purpur"],
                     featured: $featured,
                     release_channel: $channel,
-                    changelog: $changelog,
-                    dependencies: [],
+                    changelog: .,
+                    dependencies: [
+                    {
+                        version: "*",
+                        project_id: "UmLGoGij",
+                        dependency_type: "required"
+                    },
+                    {
+                        version: "*",
+                        project_id: "hXiIvTyT",
+                        dependency_type: "required"
+                    }
+                    ],
                     file_parts: [$file]
-                }' > version.json
+                }' < changelog.txt > update.json
 
           - name: Upload to Modrinth via API
             env:
