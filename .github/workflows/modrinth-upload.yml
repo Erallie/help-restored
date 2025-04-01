@@ -73,7 +73,7 @@ jobs:
                     changelog: .,
                     dependencies: [],
                     file_parts: [$file]
-                }' < changelog.txt > update.json
+                }' < changelog.txt > version.json
 
           - name: Upload to Modrinth via API
             env:
