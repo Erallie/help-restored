@@ -93,9 +93,11 @@ public class HelpRestored extends JavaPlugin {
                     case "amended-topics":
                         HelpTopic ammendedTopic;
                         ammendedTopic = helpMap.getHelpTopic(key);
-                        ammendedTopic.amendTopic(shortText, fullText);
-                        ammendedTopic.amendCanSee(permission);
-                        getLogger().info("Ammended topic: " + key);
+                        if (ammendedTopic != null) {
+                            ammendedTopic.amendTopic(shortText, fullText);
+                            ammendedTopic.amendCanSee(permission);
+                            getLogger().info("Ammended topic: " + key);
+                        }
                         break;
                     case "index-topics":
                         String preamble = helpConfig.getString(path + ".preamble", null);
