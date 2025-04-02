@@ -3,11 +3,25 @@
 
 HelpRestored is a plugin for Minecraft Java Edition that restores compatility with Bukkit's `help.yml` to Purpur, since it appears to be broken for me otherwise.
 
-No config! Just keep Bukkit's `help.yml` in your server root, and HelpRestored will restore its functionality to Purpur!
+This plugin reads Bukkit's `help.yml` from your server root directory. Make sure the file exists, or this plugin won't work!
 
 If you want to know how to set up your `help.yml`, see [this page](https://bukkit.fandom.com/wiki/Help.yml) from Bukkit's wiki.
 
-## Commands
+# Default Config.yml
+```yml
+# DO NOT CHANGE THIS
+internal:
+  plugin-version: "X.X.X"
+# DO NOT CHANGE THIS
+
+updater:
+  # Whether to notify admins on new releases when they log in.
+  notify-on-login: true
+  # Whether to notify admins for new snapshot releases. Admins will still be notified on stable releases if this is set to "false".
+  notify-on-dev-release: false
+```
+
+# Commands
 - `/help` - Shows the help menu
   - **Usage:** `/help <topic> [page]`
   - **Permission:** `helprestored.use`
@@ -15,7 +29,7 @@ If you want to know how to set up your `help.yml`, see [this page](https://bukki
   - **Usage:** `/helpreload`
   - **Permission:** `helprestored.admin`
 
-## Permissions
+# Permissions
 - `helprestored.use`
   - **Description:** Allows use of `/help`
   - **Default:** `true`
