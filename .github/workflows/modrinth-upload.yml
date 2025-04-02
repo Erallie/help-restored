@@ -38,7 +38,7 @@ jobs:
 
           - name: Prepare Modrinth metadata
             run: |
-                echo "${{ github.event.release.body }}" > changelog.txt
+                echo "${{ toJson(github.event.release.body) }}" | jq -r '.' > changelog.txt
 
                 prerelease=${{ github.event.release.prerelease }}
                 if [ "$prerelease" = "true" ]; then
