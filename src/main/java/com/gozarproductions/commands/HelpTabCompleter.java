@@ -9,7 +9,6 @@ import org.bukkit.help.HelpTopic;
 import com.gozarproductions.HelpRestored;
 import com.gozarproductions.utils.CustomIndexHelpTopic;
 import com.gozarproductions.utils.HelpPageInfo;
-import com.gozarproductions.commands.HelpCommand;
 
 import java.util.ArrayList;
 import java.util.Collections;
