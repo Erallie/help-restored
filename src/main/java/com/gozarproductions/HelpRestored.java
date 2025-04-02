@@ -11,6 +11,11 @@ import org.bukkit.help.HelpMap;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.gozarproductions.commands.HelpCommand;
+import com.gozarproductions.managers.UpdateChecker;
+import com.gozarproductions.utils.CustomHelpTopic;
+import com.gozarproductions.utils.CustomIndexHelpTopic;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;

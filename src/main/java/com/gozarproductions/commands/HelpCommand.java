@@ -1,4 +1,4 @@
-package com.gozarproductions;
+package com.gozarproductions.commands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +10,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.help.HelpTopic;
+
+import com.gozarproductions.HelpRestored;
+import com.gozarproductions.utils.CustomIndexHelpTopic;
 
 
 public class HelpCommand implements CommandExecutor {

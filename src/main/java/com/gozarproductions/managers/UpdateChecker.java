@@ -1,7 +1,8 @@
-package com.gozarproductions;
+package com.gozarproductions.managers;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.gozarproductions.HelpRestored;
 
 import net.md_5.bungee.api.ChatColor;
 

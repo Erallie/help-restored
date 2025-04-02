@@ -1,4 +1,4 @@
-package com.gozarproductions;
+package com.gozarproductions.utils;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.help.HelpTopic;
