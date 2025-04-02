@@ -130,7 +130,7 @@ public class UpdateChecker {
         String highlight = ChatColor.GOLD.toString();
         
         player.sendMessage(
-            highlight + "[" + ChatColor.BOLD + "DiscordNickSync" + highlight + "] " + defaultColor + "A new update is available: " + highlight + latestVersion +
+            highlight + "[" + ChatColor.BOLD + plugin.getName() + highlight + "] " + defaultColor + "A new update is available: " + highlight + latestVersion +
             "\n" + defaultColor + "(Current version: " + highlight + currentVersion + defaultColor + ")" + 
             "\n" + defaultColor + "Download: " + highlight + downloadUrl);
     }
