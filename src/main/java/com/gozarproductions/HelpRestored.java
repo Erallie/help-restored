@@ -59,7 +59,7 @@ public class HelpRestored extends JavaPlugin {
 
         
         // Run the Update Checker using GitHub API
-        updateChecker = new UpdateChecker(this, "Erallie", "help-restored");
+        updateChecker = new UpdateChecker(this, "Erallie", "help-restored", "helprestored.admin");
         updateChecker.checkForUpdates();
         
         // Delay topic loading to ensure help.yml is fully registered
