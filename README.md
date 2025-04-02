@@ -7,6 +7,11 @@ This plugin reads Bukkit's `help.yml` from your server root directory. Make sure
 
 If you want to know how to set up your `help.yml`, see [this page](https://bukkit.fandom.com/wiki/Help.yml) from Bukkit's wiki.
 
+## Tab Completer
+HelpRestored offers tab completion when using the `/help` command.
+- When no topic is specified, it suggests all the `index-topics` defined in your `help.yml`
+- When you start typing, it also suggests commands that match.
+
 # Default Config.yml
 ```yml
 # DO NOT CHANGE THIS
