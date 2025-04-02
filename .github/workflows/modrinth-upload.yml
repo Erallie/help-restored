@@ -26,6 +26,10 @@ jobs:
 
                 echo "ASSET_NAME=$jar_name" >> $GITHUB_ENV
 
+                echo "release_info<<EOF" >> $GITHUB_OUTPUT
+                echo "$asset_info" >> $GITHUB_OUTPUT
+                echo "EOF" >> $GITHUB_OUTPUT
+
           - name: Download the JAR from the release
             env:
                 GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -38,7 +42,7 @@ jobs:
 
           - name: Prepare Modrinth metadata
             run: |
-                echo "${{ toJson(github.event.release.body) }}" | jq -r 'fromjson' > changelog.txt
+                echo "${{ steps.get-jar.outputs.release_info }}" | jq -r '.body' > changelog.txt
 
                 prerelease=${{ github.event.release.prerelease }}
                 if [ "$prerelease" = "true" ]; then
