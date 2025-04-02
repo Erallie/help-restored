@@ -1,4 +1,7 @@
 # HelpRestored
+<a href="https://modrinth.com/plugin/help-restored/version/latest">
+  <img alt="GitHub Release Date" src="https://img.shields.io/github/release-date/Erallie/help-restored?display_date=published_at&style=for-the-badge&label=Latest%20Release">
+</a>
 <a href="https://github.com/Erallie/help-restored" target="_blank">
   <img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/Erallie/help-restored/total?style=for-the-badge&logo=github&logoColor=ffffff&label=GitHub%20Downloads&color=hsl(0%2C%200%25%2C%2020%25)">
 </a>
