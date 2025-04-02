@@ -1,16 +1,19 @@
 # HelpRestored
 <a href="https://github.com/Erallie/help-restored" target="_blank">
-<img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/Erallie/help-restored/total?style=for-the-badge&logo=github&logoColor=ffffff&label=GitHub%20Downloads&color=hsl(0%2C%200%25%2C%2020%25)">
+  <img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/Erallie/help-restored/total?style=for-the-badge&logo=github&logoColor=ffffff&label=GitHub%20Downloads&color=hsl(0%2C%200%25%2C%2020%25)">
 </a>
 <a href="https://modrinth.com/plugin/help-restored" target="_blank">
-<img alt="Modrinth Downloads" src="https://img.shields.io/modrinth/dt/zE5EbgF4?style=for-the-badge&logo=modrinth&logoColor=00af5c&label=Modrinth%20Downloads&color=00af5c">
+  <img alt="Modrinth Downloads" src="https://img.shields.io/modrinth/dt/zE5EbgF4?style=for-the-badge&logo=modrinth&logoColor=00af5c&label=Modrinth%20Downloads&color=00af5c">
 </a>
 <br>
 <a href="https://discord.gg/cCCEk7BX4W" target="_blank">
-<img alt="Discord" src="https://img.shields.io/discord/1102582171207741480?style=for-the-badge&logo=discord&logoColor=ffffff&label=Our%20Discord&color=5865F2">
+  <img alt="Discord" src="https://img.shields.io/discord/1102582171207741480?style=for-the-badge&logo=discord&logoColor=ffffff&label=Our%20Discord&color=5865F2">
 </a>
 <a href="https://github.com/Erallie" target="_blank">
-<img alt="Static Badge" src="https://img.shields.io/badge/Our%20Other%20Projects-%E2%9D%A4-563294?style=for-the-badge">
+  <img alt="Static Badge" src="https://img.shields.io/badge/Our%20Other%20Projects-%E2%9D%A4-563294?style=for-the-badge">
+</a>
+<a href="https://www.paypal.com/donate/?hosted_button_id=PHHGM83BQZ8MA" target="_blank">
+  <img alt="Static Badge" src="https://img.shields.io/badge/Donate-%24-563294?style=for-the-badge&logo=paypal&color=rgb(0%2C%2048%2C%20135)">
 </a>
 
 ---
