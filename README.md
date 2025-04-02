@@ -1,5 +1,19 @@
 # HelpRestored
-[Our Discord](https://discord.gg/cCCEk7BX4W) | [Our Other Projects](https://github.com/Erallie) | [Modrinth](https://modrinth.com/plugin/help-restored) | [GitHub](https://github.com/Erallie/help-restored)
+<a href="https://github.com/Erallie/help-restored" target="_blank">
+<img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/Erallie/help-restored/total?style=for-the-badge&logo=github&logoColor=ffffff&label=GitHub%20Downloads&color=hsl(0%2C%200%25%2C%2020%25)">
+</a>
+<a href="https://modrinth.com/plugin/help-restored" target="_blank">
+<img alt="Modrinth Downloads" src="https://img.shields.io/modrinth/dt/zE5EbgF4?style=for-the-badge&logo=modrinth&logoColor=00af5c&label=Modrinth%20Downloads&color=00af5c">
+</a>
+<br>
+<a href="https://discord.gg/cCCEk7BX4W" target="_blank">
+<img alt="Discord" src="https://img.shields.io/discord/1102582171207741480?style=for-the-badge&logo=discord&logoColor=ffffff&label=Our%20Discord&color=5865F2">
+</a>
+<a href="https://github.com/Erallie" target="_blank">
+<img alt="Static Badge" src="https://img.shields.io/badge/Our%20Other%20Projects-%E2%9D%A4-563294?style=for-the-badge">
+</a>
+
+---
 
 HelpRestored is a plugin for Minecraft Java Edition that restores compatility with Bukkit's `help.yml` to Purpur, since it appears to be broken for me otherwise.
 
