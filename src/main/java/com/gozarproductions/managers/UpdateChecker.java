@@ -38,7 +38,7 @@ public class UpdateChecker {
                 JsonObject json = JsonParser.parseReader(new InputStreamReader(connection.getInputStream())).getAsJsonObject();
                 String tagName = json.get("tag_name").getAsString();
                 latestVersion = tagName.replace("v", ""); // Remove 'v' prefix if present
-                String modrinthUrl = "https://modrinth.com/plugin/discord-nick-sync/version/" + tagName;
+                String modrinthUrl = "https://modrinth.com/plugin/help-restored/version/" + tagName;
                 try {
                     HttpURLConnection modrinthCheck = (HttpURLConnection) new URL(modrinthUrl).openConnection();
                     modrinthCheck.setRequestMethod("HEAD");
