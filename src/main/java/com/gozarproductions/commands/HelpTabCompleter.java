@@ -33,26 +33,35 @@ public class HelpTabCompleter implements TabCompleter {
             String input = args[0].toLowerCase(Locale.ROOT);
             Set<String> suggestions = new HashSet<>();
 
-            for (HelpTopic topic : plugin.getHelpMap().getHelpTopics()) {
-                String name = topic.getName();
-                String strippedName = stripLeadingSlash(name);
-                if (topic.canSee(sender)) {
-                    if (strippedName.toLowerCase(Locale.ROOT).startsWith(input)) {
-                        suggestions.add(strippedName);
-                    } else if (name.toLowerCase(Locale.ROOT).startsWith(input)) {
-                        suggestions.add(name);
+            if (input.isEmpty()) {
+                // Only show index topics when nothing is typed
+                for (CustomIndexHelpTopic topic : plugin.getIndexTopics()) {
+                    if (topic.canSee(sender)) {
+                        suggestions.add(stripLeadingSlash(topic.getName()));
                     }
                 }
-            }
+            } else {
+                for (HelpTopic topic : plugin.getHelpMap().getHelpTopics()) {
+                    String name = topic.getName();
+                    String strippedName = stripLeadingSlash(name);
+                    if (topic.canSee(sender)) {
+                        if (strippedName.toLowerCase(Locale.ROOT).startsWith(input)) {
+                            suggestions.add(strippedName);
+                        } else if (name.toLowerCase(Locale.ROOT).startsWith(input)) {
+                            suggestions.add(name);
+                        }
+                    }
+                }
 
-            for (CustomIndexHelpTopic topic : plugin.getIndexTopics()) {
-                String name = topic.getName();
-                String strippedName = stripLeadingSlash(name);
-                if (topic.canSee(sender)) {
-                    if (strippedName.toLowerCase(Locale.ROOT).startsWith(input)) {
-                        suggestions.add(strippedName);
-                    } else if (name.toLowerCase(Locale.ROOT).startsWith(input)) {
-                        suggestions.add(name);
+                for (CustomIndexHelpTopic topic : plugin.getIndexTopics()) {
+                    String name = topic.getName();
+                    String strippedName = stripLeadingSlash(name);
+                    if (topic.canSee(sender)) {
+                        if (strippedName.toLowerCase(Locale.ROOT).startsWith(input)) {
+                            suggestions.add(strippedName);
+                        } else if (name.toLowerCase(Locale.ROOT).startsWith(input)) {
+                            suggestions.add(name);
+                        }
                     }
                 }
             }
