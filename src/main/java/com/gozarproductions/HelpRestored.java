@@ -15,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.gozarproductions.commands.HelpCommand;
 import com.gozarproductions.commands.HelpTabCompleter;
 import com.gozarproductions.listeners.UpdateListener;
+import com.gozarproductions.managers.ConfigUpdater;
 import com.gozarproductions.managers.UpdateChecker;
 import com.gozarproductions.utils.CustomHelpTopic;
 import com.gozarproductions.utils.CustomIndexHelpTopic;
@@ -55,6 +56,19 @@ public class HelpRestored extends JavaPlugin {
     @Override
     public void onEnable() {
         getLogger().info("HelpRestored enabled.");
+        
+        // Save default config
+        saveDefaultConfig();
+        
+        ConfigUpdater configUpdater = new ConfigUpdater(this);
+        configUpdater.checkAndUpdateConfigs();
+        
+        reloadConfig();
+        
+        // Run the Update Checker using GitHub API
+        updateChecker = new UpdateChecker(this, "Erallie", "help-restored", "helprestored.admin");
+        updateChecker.checkForUpdates();
+        
         loadHelpConfig();
         helpMap = Bukkit.getHelpMap();
         indexTopics = new ArrayList<>();
@@ -65,9 +79,6 @@ public class HelpRestored extends JavaPlugin {
         getCommand("helpreload").setExecutor(new HelpReload());
 
         
-        // Run the Update Checker using GitHub API
-        updateChecker = new UpdateChecker(this, "Erallie", "help-restored", "helprestored.admin");
-        updateChecker.checkForUpdates();
 
         registerUpdateListener();
         // Delay topic loading to ensure help.yml is fully registered
@@ -168,13 +179,14 @@ public class HelpRestored extends JavaPlugin {
     public class HelpReload implements CommandExecutor {
         @Override
         public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+            reloadConfig();
             loadHelpConfig();
             loadCustomTopics();
             
-            updateChecker.checkForUpdates();
-            
             registerUpdateListener();
-            sender.sendMessage("§6HelpRestored §cand §6help.yml §esuccessfully reloaded!");
+            sender.sendMessage("§6HelpRestored §eand §6help.yml §esuccessfully reloaded!");
+            
+            updateChecker.checkForUpdates();
             return true;
         }
         
