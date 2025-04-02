@@ -12,6 +12,7 @@ import org.bukkit.help.HelpTopic;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gozarproductions.commands.HelpCommand;
+import com.gozarproductions.commands.HelpTabCompleter;
 import com.gozarproductions.managers.UpdateChecker;
 import com.gozarproductions.utils.CustomHelpTopic;
 import com.gozarproductions.utils.CustomIndexHelpTopic;
@@ -53,6 +54,7 @@ public class HelpRestored extends JavaPlugin {
 
         // helpCommand = new HelpCommand(this);
         getCommand("help").setExecutor(new HelpCommand(this));
+        getCommand("help").setTabCompleter(new HelpTabCompleter(this));
         getCommand("helpreload").setExecutor(new HelpReload());
 
         

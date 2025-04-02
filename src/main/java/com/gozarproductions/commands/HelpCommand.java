@@ -13,11 +13,12 @@ import org.bukkit.help.HelpTopic;
 
 import com.gozarproductions.HelpRestored;
 import com.gozarproductions.utils.CustomIndexHelpTopic;
+import com.gozarproductions.utils.HelpPageInfo;
 
 
 public class HelpCommand implements CommandExecutor {
     private final HelpRestored plugin;
-    private static final int ENTRIES_PER_PAGE = 10;
+    public static final int ENTRIES_PER_PAGE = 10;
 
     public HelpCommand(HelpRestored plugin) {
         this.plugin = plugin;
@@ -163,5 +164,15 @@ public class HelpCommand implements CommandExecutor {
         for (int i = start; i < end; i++) {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', lines.get(i)));
         }
+    }
+
+    public static HelpPageInfo paginate(String fullText, String preamble) {
+        List<String> preambleLines = (preamble == null) ? new ArrayList<>() : Arrays.asList(preamble.split("\n"));
+        List<String> lines = (fullText == null) ? new ArrayList<>() : Arrays.asList(fullText.split("\n"));
+
+        int entriesPerPage = ENTRIES_PER_PAGE - (preambleLines.size() + 1); // +1 for title line
+        int totalPages = Math.max(1, (int) Math.ceil((double) lines.size() / entriesPerPage));
+
+        return new HelpPageInfo(lines, preambleLines, entriesPerPage, totalPages);
     }
 }
