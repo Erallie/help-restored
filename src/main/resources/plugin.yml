@@ -11,7 +11,7 @@ commands:
     usage: /help <topic> [page]
     permission: helprestored.use
   helpreload:
-    description: Safely reloads help.yml
+    description: Safely reloads help.yml and all HelpRestored configs.
     usage: /helpreload
     permission: helprestored.admin
 permissions:
