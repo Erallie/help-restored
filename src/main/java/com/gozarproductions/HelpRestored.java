@@ -7,12 +7,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.HandlerList;
 import org.bukkit.help.HelpMap;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gozarproductions.commands.HelpCommand;
 import com.gozarproductions.commands.HelpTabCompleter;
+import com.gozarproductions.listeners.UpdateListener;
 import com.gozarproductions.managers.UpdateChecker;
 import com.gozarproductions.utils.CustomHelpTopic;
 import com.gozarproductions.utils.CustomIndexHelpTopic;
@@ -31,6 +33,7 @@ public class HelpRestored extends JavaPlugin {
     private HelpMap helpMap;
     private List<CustomIndexHelpTopic> indexTopics;
     private UpdateChecker updateChecker;
+    private UpdateListener updateListener = null;
     // private HelpCommand helpCommand;
 
     public FileConfiguration getHelpConfig() {
@@ -43,6 +46,10 @@ public class HelpRestored extends JavaPlugin {
 
     public List<CustomIndexHelpTopic> getIndexTopics() {
         return indexTopics;
+    }
+
+    public UpdateChecker getUpdateChecker() {
+        return updateChecker;
     }
 
     @Override
@@ -61,7 +68,8 @@ public class HelpRestored extends JavaPlugin {
         // Run the Update Checker using GitHub API
         updateChecker = new UpdateChecker(this, "Erallie", "help-restored", "helprestored.admin");
         updateChecker.checkForUpdates();
-        
+
+        registerUpdateListener();
         // Delay topic loading to ensure help.yml is fully registered
         Bukkit.getScheduler().runTask(this, () -> loadCustomTopics());
     }
@@ -164,9 +172,21 @@ public class HelpRestored extends JavaPlugin {
             loadCustomTopics();
             
             updateChecker.checkForUpdates();
-            sender.sendMessage("§6help.yml §esuccessfully reloaded!");
+            
+            registerUpdateListener();
+            sender.sendMessage("§6HelpRestored §cand §6help.yml §esuccessfully reloaded!");
             return true;
         }
         
+    }
+
+    private void registerUpdateListener() {
+        if (getConfig().getBoolean("updater.notify-on-login", true) && updateListener == null) {
+            updateListener = new UpdateListener(this, "helprestored.admin");
+            getServer().getPluginManager().registerEvents(updateListener, this);
+        } else if (updateListener != null) {
+            HandlerList.unregisterAll(updateListener);
+            updateListener = null;
+        }
     }
 }

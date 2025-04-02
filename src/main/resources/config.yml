@@ -1,0 +1,10 @@
+# DO NOT CHANGE THIS
+internal:
+  plugin-version: "1.0.1"
+# DO NOT CHANGE THIS
+
+updater:
+  # Whether to notify admins on new releases when they log in.
+  notify-on-login: true
+  # Whether to notify admins for new snapshot releases. Admins will still be notified on stable releases if this is set to "false".
+  notify-on-dev-release: false
