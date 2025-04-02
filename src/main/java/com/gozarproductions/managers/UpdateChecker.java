@@ -115,7 +115,7 @@ public class UpdateChecker {
      */
     private void notifyAdmins() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (player.hasPermission("discordnick.admin")) {
+            if (player.hasPermission("helprestored.admin")) {
                 notify(player);
             }
         }
