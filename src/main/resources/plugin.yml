@@ -1,5 +1,5 @@
 name: HelpRestored
-version: 1.0.1
+version: 1.0.2
 main: com.gozarproductions.HelpRestored
 api-version: 1.21
 description: Restores Bukkit's help.yml to Purpur.
